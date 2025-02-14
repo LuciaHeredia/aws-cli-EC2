@@ -1,12 +1,13 @@
 #!/bin/bash
+source config.conf
 
 ######################## Variables ########################
-REGION="us-east-2"
-UBUNTU_AMI_ID="ami-0884d2865dbe9de4b"
+REGION=$REGION
+UBUNTU_AMI_ID=$UBUNTU_AMI_ID
 RANDOM_STR=$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10)
 SG_NAME="aws6-sg-$RANDOM_STR"
-USER_DATA_FILE_NAME="ApacheServerAndHTML.sh"
-EC2_key_pair_name="key-pair-2"
+USER_DATA_FILE_NAME=$USER_DATA_FILE_NAME
+EC2_KEY_PAIR_NAME=$EC2_KEY_PAIR_NAME
 
 ######################## 1. VPC ########################
 echo "Creating VPC..."
@@ -71,11 +72,13 @@ echo "Mapping the Public IP to the Public Subnet..."
 aws ec2 modify-subnet-attribute --subnet-id "$SUBNET_ID_1" --map-public-ip-on-launch
 
 ######################## 5. Key Pair ########################
+# if you dont have a key par, create one here and save, then put it in the EC2 Dashboard -> Key Pair, with the same name("AWS-Keypair").
 # must be kept safe & secure with the user so that the person can access the EC2 instance created using this key pair.
 : <<'COMMENT'
 echo "Creating Key Pair..."
-aws ec2 create-key-pair --key-name AWS-Keypair --query "KeyMaterial" \
-                        --output text > "AWS_Keypair.pem"
+EC2_KEY_PAIR_NAME="AWS-Keypair"
+aws ec2 create-key-pair --key-name $EC2_KEY_PAIR_NAME \
+                        --query "KeyMaterial" --output text > "AWS_Keypair.pem")
 
 # echo "waiting 10 seconds.."
 # sleep 10
@@ -106,6 +109,6 @@ aws ec2 run-instances --region "$REGION" --image-id "$UBUNTU_AMI_ID" --count 1 -
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=i-example}]" \
 	--security-group-id "$SG_ID" --subnet-id "$SUBNET_ID_1" \
 	--user-data file://"$USER_DATA_FILE_NAME" \
-	--key-name "$EC2_key_pair_name"
+	--key-name "$EC2_KEY_PAIR_NAME"
 
 echo "Deployment complete"
