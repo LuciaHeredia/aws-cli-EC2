@@ -1,0 +1,2 @@
+## AWS CLI script for creating EC2 instance with: VPC, Subnets, Internet Gateway, Route Table, Security Group.
+*Source: https://www.geeksforgeeks.org/creating-ec2-instance-with-aws-cli/#creating-route-table*
