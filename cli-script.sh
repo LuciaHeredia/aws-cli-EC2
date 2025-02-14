@@ -84,7 +84,7 @@ aws ec2 create-key-pair --key-name $EC2_KEY_PAIR_NAME \
 # sleep 10
 COMMENT
 ######################## 6. Security Group ########################
-# Allow inbound traffic on port 80(HTTP), 443(HTTPS) and secure connection on port 22(SSH).
+# Allow inbound traffic on port 80(HTTP) and secure connection on port 22(SSH).
 
 echo "Creating security group..."
 SG_ID=$(aws ec2 create-security-group --group-name "$SG_NAME" --vpc-id "$VPC_ID"\
@@ -92,8 +92,6 @@ SG_ID=$(aws ec2 create-security-group --group-name "$SG_NAME" --vpc-id "$VPC_ID"
     --output text)
 aws ec2 authorize-security-group-ingress --group-id "$SG_ID" \
 	                                    --protocol tcp --port 80 --cidr 0.0.0.0/0
-aws ec2 authorize-security-group-ingress --group-id "$SG_ID" \
-                                        --protocol tcp --port 443 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id "$SG_ID" \
                                         --protocol tcp --port 22 --cidr 0.0.0.0/0
 
