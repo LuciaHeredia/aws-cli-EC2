@@ -1,5 +1,5 @@
 #!/bin/bash
-source config.conf
+source config.conf # private variables file
 
 ######################## Variables ########################
 REGION=$REGION
@@ -102,7 +102,6 @@ sleep 30
 ######################## 7. EC2 Instances ########################
 # Associate SG with the instance. 
 # Install & configure Apache on instance. 
-# Create HTML file on instance ("/var/www/html/index.html") with content.  
 
 echo "Launching EC2 instances..."
 aws ec2 run-instances --region "$REGION" --image-id "$UBUNTU_AMI_ID" --count 1 --instance-type t2.micro \
